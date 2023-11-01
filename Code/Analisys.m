@@ -161,7 +161,7 @@ subtitle('Perceived Intensity');
 
 % Save the figure as Fig4
 saveas(gcf, 'Fig4_v2.png');
-%%
+%% Figure 5 generation
 
 % Data for perceived intensity
 pulse_width = [40, 100, 150, 200, 250];
