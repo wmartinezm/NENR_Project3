@@ -83,7 +83,7 @@ end
 % Set common titles and labels for both subplots
 subtitle('Perceived Intensity');
 
-% Save the figure as Fig4 (you can customize the path)
+% Save the figure as Fig4 
 saveas(gcf, 'Fig4_v1.png');
 %% Since the data is not normally distributed, use box plots to show the median +/- IQR.
 % Data for perceived intensity
@@ -159,9 +159,77 @@ end
 % Set common titles and labels for both subplots
 subtitle('Perceived Intensity');
 
-% Save the figure as Fig4 (you can customize the path)
+% Save the figure as Fig4
 saveas(gcf, 'Fig4_v2.png');
+%%
 
+% Data for perceived intensity
+pulse_width = [40, 100, 150, 200, 250];
+pulse_frequency = [30, 60, 90, 120, 150, 180, 210, 240];
+
+% Perceived intensity data for each participant
+intensity_pw = [
+    1, 1, 1;
+    1, 1, 2;
+    2, 2, 2;
+    3, 3, 2;
+    3, 3, 2
+];
+
+intensity_freq = [
+    2, 2, 2;
+    3, 2, 1;
+    4, 3, 1;
+    4, 3, 1;
+    3, 3, 2;
+    5, 3, 2;
+    5, 4, 2;
+    5, 3, 1
+];
+
+% Initialize arrays to store slopes and p-values
+slopes_pw = zeros(size(intensity_pw, 2), 1);
+slopes_freq = zeros(size(intensity_freq, 2), 1);
+p_values = zeros(size(intensity_pw, 2), 1);
+
+% Calculate the slopes of the lines of best fit for each participant and each parameter
+for participant = 1:size(intensity_pw, 2)
+    % Calculate the slope for pulse width
+    p_pw = polyfit(pulse_width, intensity_pw(:, participant), 1);
+    slopes_pw(participant) = p_pw(1);
+    
+    % Calculate the slope for pulse frequency
+    p_freq = polyfit(pulse_frequency, intensity_freq(:, participant), 1);
+    slopes_freq(participant) = p_freq(1);
+    
+    % Perform a statistical test Wilcoxon rank sum test to check for differences
+    p_values(participant) = ranksum(intensity_pw(:, participant), intensity_freq(:, participant));
+end
+
+% Create boxplots for the slopes for each participant
+figure;
+
+subplot(2, 1, 1);
+% boxplot(slopes_pw, 'Labels', {'Participant 1', 'Participant 2', 'Participant 3'});
+boxplot(slopes_pw);
+title('Slopes of Lines of Best Fit for Pulse Width');
+ylabel('Slope');
+
+subplot(2, 1, 2);
+% boxplot(slopes_freq, 'Labels', {'Participant 1', 'Participant 2', 'Participant 3'});
+boxplot(slopes_freq);
+title('Slopes of Lines of Best Fit for Pulse Frequency');
+ylabel('Slope');
+
+% Add an indicator for the statistical difference
+if any(p_values < 0.05)
+    fprintf('There is a statistically significant difference between pulse width and pulse frequency for at least one participant.\n');
+else
+    fprintf('There is no statistically significant difference between pulse width and pulse frequency for any participant.\n');
+end
+
+% Save the figure as Fig5
+saveas(gcf, 'Fig5.png');
 %% Test for normality PW
 % Data
 pulse_width = [40, 100, 150, 200, 250];
