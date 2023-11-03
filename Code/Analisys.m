@@ -11,6 +11,7 @@ perceived_intensity_pw = perceived_intensity_pw / n; % Normalize
 linefit_pw = zeros(5,participants);
 
 % Plot Part 1: Perceived magnitude as a function of pulse width
+    line_styles = {'--', ':', '-.', '.'};
 figure;
 subplot(2, 1, 1);
 if isequal(size(perceived_intensity_pw), [length(pulse_widths), participants])
@@ -28,9 +29,8 @@ if isequal(size(perceived_intensity_pw), [length(pulse_widths), participants])
     hold on;
     for i = 1:participants
         p = polyfit(pulse_widths, perceived_intensity_pw(:, i), 1);
-        % linefit = polyval(p, pulse_widths);
         linefit_pw(:,i) = polyval(p, pulse_widths);
-        plot(pulse_widths, linefit_pw(:,i), '--', 'LineWidth', 1.5);
+        plot(pulse_widths, linefit_pw(:,i), line_styles{i}, 'LineWidth', 1.5);
     end
     legend('Median Perceived Magnitude', 'Participant 1 Fit', 'Participant 2 Fit', 'Participant 3 Fit');
     hold off;
@@ -67,7 +67,7 @@ if isequal(size(perceived_intensity_pf), [length(pulse_frequencies), participant
     for i = 1:participants
         p = polyfit(pulse_frequencies, perceived_intensity_pf(:, i), 1);
         linefit_pf(:,i) = polyval(p, pulse_frequencies);
-        plot(pulse_frequencies, linefit_pf(:,i), '--', 'LineWidth', 1.5);
+        plot(pulse_frequencies, linefit_pf(:,i), line_styles{i}, 'LineWidth', 1.5);
     end
     
     legend('Median Perceived Magnitude', 'Participant 1 Fit', 'Participant 2 Fit', 'Participant 3 Fit');
