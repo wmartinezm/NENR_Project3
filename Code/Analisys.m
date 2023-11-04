@@ -191,7 +191,6 @@ intensity_freq = [
 slopes_pw = zeros(size(intensity_pw, 2), 1);
 slopes_freq = zeros(size(intensity_freq, 2), 1);
 p_values = zeros(size(intensity_pw, 2), 1);
-%% 
 
 % Calculate the slopes of the lines of best fit for each participant and each parameter
 for participant = 1:size(intensity_pw, 2)
@@ -206,7 +205,35 @@ for participant = 1:size(intensity_pw, 2)
     % Perform a statistical test Wilcoxon rank sum test to check for differences
     p_values(participant) = ranksum(intensity_pw(:, participant), intensity_freq(:, participant));
 end
+%Merge each particpant pw and pf into an array of 1X15
+% Remove first two pf rows and last row to have arrays of equal isuze
+pf_comb = [ ];
+for participant = 1:size(linefit_pf, 2)
+  %  print(participant)
+    for participant_row = 1:size(linefit_pf(:,1))
+        if participant_row > 2 && participant_row ~= 8
 
+        %    print(participant_row)
+            pf_comb = cat(1,pf_comb, linefit_pf(participant_row,participant));
+           % new = pf_comb.addrow(linefit_pf(participant_row,participant));
+
+        end
+    end
+end
+
+pw_comb = [ ];
+for participant = 1:size(linefit_pw, 2)
+  %  print(participant)
+    for participant_row = 1:length(linefit_pw(:,1))
+        pw_comb = cat(1,pw_comb, linefit_pw(participant_row,participant));
+
+
+    end
+end
+% combine pulse width and pulse frequncy
+pw_pf_comb = cat(2,pw_comb,pf_comb)
+%Do statistics between pw and pf
+pw_pf_pval = signrank(pw_comb,pf_comb);
 % Create boxplots for the slopes for each participant
 figure;
 
@@ -231,6 +258,13 @@ end
 
 % Save the figure as Fig5
 saveas(gcf, 'Fig5.png');
+%Figure comparing pw and pf for each particpant
+figure;
+hold on 
+boxplot(pw_pf_comb,'Labels', {'pulse width', 'pulse frequency'})
+title('Slopes of line of best fit for Pulse width and Pulse Frequency');
+ylabel('slope of lines of best fit')
+hold off
 %% Test for normality PW
 % Data
 pulse_width = [40, 100, 150, 200, 250];
