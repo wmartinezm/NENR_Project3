@@ -212,7 +212,7 @@ pf_comb = [ ];
 for participant = 1:size(linefit_pf, 2)
   %  print(participant)
     for participant_row = 1:size(linefit_pf(:,1))
-        if participant_row > 2 && participant_row ~= 8
+        if participant_row > 2
   
         %    print(participant_row)
             pf_comb = cat(1,pf_comb, linefit_pf(participant_row,participant));
