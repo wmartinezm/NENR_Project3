@@ -1,4 +1,4 @@
-%% Since the data is not normally distributed, use box plots to show the median +/- IQR.
+%% Figure 4 generation. Since the data is not normally distributed, use box plots to show the median +/- IQR.
 % Data for perceived intensity
 n = 5; % Number of intensity levels
 participants = 3;
